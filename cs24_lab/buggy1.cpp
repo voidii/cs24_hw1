@@ -19,7 +19,7 @@ int main()
   {
     cout << "Enter a course name:\n";
     getline(cin,courseName,'\n');
-//    cin >> courseName;
+//  cin >> courseName; 加入此行并删除getline也可以解决bug
     courseNamesTable[courseCounter] = courseName;
     cout << "You are registered for the following " << courseCounter + 1 << " courses:\n";
 
@@ -45,7 +45,7 @@ string trackUserAnswer()
   {
      cout << "\n Do you Want to register for  another course? (y/n)\n";
      cin >> userAnswer;
-     cin.ignore(1000, '\n');
+     cin.ignore(1000, '\n');//加入此行之后，getline导致的bug消失
      cout << "Your Answer is:" << userAnswer << "\n";
   }
 
