@@ -1,0 +1,49 @@
+q1: 
+Point3d::Point3d(double x, double y, double z)
+{ 
+this->x = x; 
+this->y = y; 
+this->z = z;
+} 
+ 
+void Pont3d::setX(double x)
+{ 
+this->x =x; 
+} 
+ 
+void Point3d::setY(double y)
+{ 
+this->y = y; 
+} 
+ 
+void Pont3d::setZ (double z)
+{ 
+this->z = z; 
+} 
+ 
+double Point3d::getX() const{ return x; } 
+ 
+double Point3d::getY() const{ return y; } 
+ 
+double Point3d::getZ() const{ return z; } 
+ 
+void Point3d::shift( int axis, double distance)
+{ 
+assert(axis == 0|| axis == 1 || axis == 2); if(axis==1) x = x + distance; 
+if(axis==2) 
+  y = y + distance; 
+ if(axis==3) 
+  z = z + distance; 
+ } 
+ 
+bool operator == (const Point3d &p1, const Point3d &p2)
+{ 
+if(p1.getX() == p2.getX() && p1.getY() == p2.getY() && p1.getZ() == p2.getZ()) 
+  return true; 
+return false; 
+} 
+
+Q2: bool operator == (bag &b1,bag &b2){ if(b1.size() != b2.size()) return false; sort(b1); sort(b2); for( bag::size_type i = 0; i <b1.size(); ++i) { if(b1.get_value(i) != b2.get_value(i))  return false; } return true; } 
+ 
+Q3:w a) 10 and 20 20 and 20 30 and 30  40 and 40 b) 0 1 2 3 4 5 6 7 8 9 
+ 
