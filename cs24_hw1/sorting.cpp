@@ -27,3 +27,20 @@ int main()
 	sort(arr_1, 10);
 	return 0;
 }
+
+/*题目中的源代码：
+void sort ( int arr [] , int n) 
+{ 
+	int i , key , j ; 
+	for ( i = 1; i < n; i++)
+	{ 
+		key = arr [ i ] ; 
+		j = i −1; 
+		while ( j >= 0 && arr [ j ] > key) 
+		{ 
+			arr [ j +1] = arr [ j ] ;
+			j = j−1; 
+		} 
+		arr [ j +1] = key ; //这一行的存在意义是什么
+	}
+}
