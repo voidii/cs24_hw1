@@ -8,13 +8,10 @@
 #include "word.h"
 #include "bag.h"
 #include "itemtype.h"
-
-
-
+#include "wordsearch.h"
 
 using namespace std;
 
-/*function... might want it in some class?*/
 
 int getdir (string dir, vector<string> &files)
 {
@@ -34,84 +31,96 @@ int getdir (string dir, vector<string> &files)
 
 int main(int argc, char* argv[])
 {
-  string dir; //
-  vector<string> files = vector<string>();
-  bag bag_one;
-  wordddd word_s[1000];
-  int words_list_size = 0;
-  if (argc < 2)
-    {
-      cout << "No Directory specified; Exiting ..." << endl;
-      return(-1);
-    }
-  dir = string(argv[1]);
-  if (getdir(dir,files)!=0)
-    {
-      cout << "Error opening " << dir << "; Exiting ..." << endl;
-      return(-2);
-    }
-  
-  string slash("/");
-  for (unsigned int i = 0; i < files.size(); i++) 
-  {
-	if(files[i][0]=='.')continue; //skip hidden files
-    ifstream fin((string(argv[1])+slash+files[i]).c_str()); //open using absolute path
-    // ...read the file...
-    string word;
-    while(true)
+	string dir; //
+	vector<string> files = vector<string>();
+	bag bag_one;
+	wordddd word_s[1000];
+	int words_list_size = 0;
+
+
+
+	if (argc < 2)
 	{
-      fin>>word;
-      if(fin.eof()) 
-	  {
-		cout << "EOF " << files[i] << endl; 
-		//j = j + 1;
-		//word_for_file[0].next_file;
-		break;
-	  }
-      else 
-	  {
-	    int j = 0;
-		while(j <= words_list_size)
+		cout << "No Directory specified; Exiting ..." << endl;
+		return(-1);
+	}
+	dir = string(argv[1]);
+	if (getdir(dir, files) != 0)
+	{
+		cout << "Error opening " << dir << "; Exiting ..." << endl;
+		return(-2);
+	}
+
+	string slash("/");
+	for (unsigned int i = 0; i < files.size(); i++)
+	{
+		if (files[i][0] == '.')continue; 
+		ifstream fin((string(argv[1]) + slash + files[i]).c_str()); 
+		
+		string word;
+		while (true)
 		{
-			if (word_s[j].wordname() == word)
+			fin >> word;
+			if (fin.eof())
 			{
-				word_s[j].bag_file_add_one(files[i]);
-				break;
-			}
-			else if (j == words_list_size)
-			{
-				word_s[j].input_word(word);
-				words_list_size = words_list_size + 1;
-				word_s[j].bag_file_add_one(files[i]);
 				break;
 			}
 			else
 			{
-				j++;
+				int j = 0;
+				while (j <= words_list_size)
+				{
+					if (word_s[j].wordname() == word)
+					{
+						word_s[j].bag_file_add_one(files[i]);
+						break;
+					}
+					else if (j == words_list_size)
+					{
+						word_s[j].input_word(word);
+						words_list_size = words_list_size + 1;
+					}
+					else
+					{
+						j++;
+					}
+				}
+			}
+
+		}
+		fin.close();
+	}
+		while (true)
+		{
+			cout << "Enter the word you want to look up: ";
+			cin >> word_we_put_in;
+			if( word_we_put_in != "exit")
+			{
+				int i = 0;
+				while(i < words_list_size)
+				{
+					if (word_s[i].wordname() == word_we_put_in)
+					{
+						cout << "The word: " << word_s[i].wordname() << " and its occurence is: ";
+						word_s[i].get_file_name();
+						cout << endl;
+						break;
+					}
+					else
+					{
+						i++;
+					}
+				}
+				if (i == words_list_size)
+				{
+					cout << "Sorry there is no such word" << endl;
+				}
+			}
+			else
+			{
+				break;
 			}
 		}
-		
-		cout<<files[i]<<"::"<<word<<endl;
-		//bag_one.add(files[i]);
-		//word_for_file[j].file_word.add(word);
-	
-	// Now the string "word" holds the keyword, and the string "files[i]" holds the document name.
-	// Use these two strings to search/insert in your array/list of words.
-      }
-    }
-    fin.close();
-  }
-
-  cout << "This is the next part of the program " << endl;
-  //bag_one.print();
-  for (int m = 0; m < words_list_size; m ++)
-  {
-	  cout << "there is word: " << word_s[m].wordname() << " and its occurence is: ";
-	  word_s[m].get_file_name();
-	  cout << endl;
-  }
-  return 0;
+	return 0;
 }
-
-
 
