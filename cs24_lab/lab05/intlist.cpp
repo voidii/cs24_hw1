@@ -1,175 +1,287 @@
-// evalfull.cpp - evaluates a fully-parenthesized expression
-// NAME(S), DATE
+// intlist.cpp
 
-#include <cstdlib>   // for atof function
-#include <cstdio>    // for sscanf
-#include <cstring>   // for strcmp and strtok
+// Implements class IntList
+
+// Frank Zhang, 11/02
+
+#include "intlist.h"
+
+
 #include <iostream>
-#include <stack>     // STL stack class
-#include <string>    // for throwing string exceptions
-using namespace std;
 
-// constants used to identify a token - DO NOT CHANGE
-enum TokenType {
-	LEFT, RIGHT, ADD, SUBTRACT, MULTIPLY,
-	DIVIDE, NUMBER, OTHER
-};
-TokenType identify(char *t);
+using std::cout;
 
-// balanced - returns true only if parentheses are balanced
-// in the expression, where expression is an array of C
-// string tokens like { "(", "4.2", ")" } and numTokens
-// is the number of tokens in the array (3 in the sample)
+// return sum of values in list
 
-bool balanced(char *expression[], int numTokens) {
+int IntList::sum() const {
 
-	stack<char *> s;  // USE s TO SOLVE THE PROBLEM - it is an STL
-					  // (Standard Template Library) structure with
-					  // all of the same operations as the stack from
-					  // Step 2 of this lab, but it won't get full
-					  // and it can store any type - <char *> here
+	Node *n = first;
 
-	for (int i = 0; i < numTokens; i++)
+	int sum = 0;
+
+	while(true)
+
 	{
-		if (expression[i] == "(")
-		{
-			s.push(expression[i]);
-			//continue;
-		}
-		if (expression[i] == ")")
-		{
-			if (s.empty())
-			{
-				return false;
-			}
-			s.pop();
-		}
-	}
-	if (s.empty())
-		return true;
-	return false; // REPLACE THIS return WITH ACTUAL IMPLEMENTATION
-}
 
-// DO NOT CHANGE ANYTHING BELOW - BUT DO READ IT
+        if (n == NULL)
 
-// utility function returns one of those constants
-TokenType identify(char *t) {
-	if (strcmp(t, "(") == 0)
-		return LEFT;
-	if (strcmp(t, ")") == 0)
-		return RIGHT;
-	if (strcmp(t, "+") == 0)
-		return ADD;
-	if (strcmp(t, "-") == 0)
-		return SUBTRACT;
-	if (strcmp(t, "*") == 0)
-		return MULTIPLY;
-	if (strcmp(t, "/") == 0)
-		return DIVIDE;
-	double value;
-	if (sscanf(t, "%g", &value) == 1)
-		return NUMBER;
-	return OTHER;
-}
+        {
 
-// evalFull - evaluates a fully-parenthesized expression;
-// relies on function balanced;
-// returns result of the expression if it is formed properly
-// throws string message if expression is not proper
-double evalFull(char *expression[], int numTokens) {
-
-	if (!balanced(expression, numTokens))
-		throw string("parentheses are not balanced");
-
-	stack<double> numbers;
-	stack<TokenType> ops;
-	double result = 0, leftValue, rightValue;
-	TokenType type, op;
-
-	for (int i = 0; i<numTokens; i++) {
-		type = identify(expression[i]);
-		switch (type) {
-		case NUMBER:
-			numbers.push(atof(expression[i]));
 			break;
-		case ADD: case SUBTRACT: case MULTIPLY: case DIVIDE:
-			ops.push(type);
-			break;
-		case LEFT:
-			break; // ignore left paren (know balanced already)
-		case RIGHT:
-			if (numbers.empty())
-				throw string("empty stack where two numbers expected");
-			rightValue = numbers.top();
-			numbers.pop();
 
-			if (ops.empty())
-				throw string("empty stack where operator expected");
-			op = ops.top();
-			ops.pop();
-
-			if (numbers.empty())
-				throw string("empty stack where one number expected");
-			leftValue = numbers.top();
-			numbers.pop();
-
-			if (op == ADD)
-				numbers.push(leftValue + rightValue);
-			else if (op == SUBTRACT)
-				numbers.push(leftValue - rightValue);
-			else if (op == MULTIPLY)
-				numbers.push(leftValue * rightValue);
-			else // op == DIVIDE
-				numbers.push(leftValue / rightValue);
-
-			break; // end right paren case
-
-		default:
-			throw string("unknown token: ")
-				+ string(expression[i]);
 		}
-	}
 
-	if (!ops.empty())
-		throw string("operator(s) left on stack at end");
+		else
 
-	if (numbers.empty())
-		throw string("empty stack where one result should be");
+		{
 
-	result = numbers.top();
-	numbers.pop();
-	if (!numbers.empty())
-		throw string("number(s) left on stack at end");
+			sum = sum + n->info;
 
-	return result;
+			n = n->next;
+
+		}
+
+    }
+
+    return sum;
+
 }
 
-#define MAXLEN 100
+// returns true if value is in the list; false if not
 
-// main gets expression from user and evaluates it
-int main() {
-	char input[MAXLEN], *tokens[MAXLEN / 2];
+bool IntList::contains(int value) const {
 
-	cout << "enter expression: ";
-	cin.getline(input, MAXLEN);
+	Node *m = first;
 
-	char *ptr = strtok(input, " ");
+	if (m == NULL)
 
-	int count = 0;
-	while (ptr != 0) {
-		tokens[count] = ptr;
-		++count;
-		ptr = strtok(0, " ");
+	{
+
+		return false;
+
 	}
 
-	try {
-		double result = evalFull(tokens, count);
-		cout << "result: " << result << endl;
-	}
-	catch (string error) {
-		cerr << "bad expression: " << error << endl;
-		return 1;
+	while(true)
+
+	{
+
+        if (m -> info == value)
+
+        {
+
+			return true;
+
+		}
+
+		if (m -> next == NULL)
+
+		{
+
+			return false;
+
+		}
+
+		else
+
+		{
+
+			m = m->next;
+
+		}
+
+    }
+
+}
+
+// returns maximum value in list, or 0 if empty list
+
+int IntList::max() const {
+
+    
+
+	Node *n = first;
+
+	if (n == NULL)
+
+	{
+
+		return 0;
+
 	}
 
-	return 0;
+	int max = n->info;
+
+	if (n == 0)
+
+        {
+
+			return 0;
+
+		}
+
+	while(true)
+
+	{
+
+        if (n->next == NULL)
+
+        {
+
+			return max;
+
+		}
+
+		if (n -> next -> info > max)
+
+		{
+
+			max = n -> next -> info;
+
+		}
+
+		n = n->next;
+
+    }  
+
+}
+
+// returns average (arithmetic mean) of all values, or
+
+// 0 if list is empty
+
+double IntList::average() const {
+
+	double result = 0.0;
+
+	if (count() == 0)
+
+	{
+
+		return 0;
+
+	}
+
+	result = double(sum())/double(count());
+
+    return result;
+
+}
+
+// inserts value as new node at beginning of list
+
+void IntList::insertFirst(int value) {
+
+	Node *n = new Node;
+
+	n -> next = first;
+
+	n->info = value;
+
+	first = n;
+
+	
+
+    // IMPLEMENT
+
+}
+
+// DO NOT CHANGE ANYTHING BELOW (READ IT THOUGH)
+
+
+// constructor sets up empty list
+
+IntList::IntList() : first(0) { }
+
+// destructor deletes all nodes
+
+IntList::~IntList() {
+
+    Node *n = first;
+
+    while (n) {
+
+        Node *garbage = n;
+
+        n = n->next;
+
+        delete garbage;
+
+    }
+
+}
+
+// append value at end of list
+
+void IntList::append(int value) {
+
+    if (first == 0) { // empty list
+
+        first = new Node;
+
+        first->info = value;
+
+        first->next = 0;
+
+    }
+
+    else {
+
+        Node *n = first;
+
+        while (n->next) // not last node yet
+
+            n = n->next;
+
+        n->next = new Node;
+
+        n->next->info = value;
+
+        n->next->next = 0;
+
+    }
+
+}
+
+// print values enclose in [], separated by spaces
+
+void IntList::print() const {
+
+    Node *n = first;
+
+    cout << '[';
+
+    while (n) {
+
+        cout << n->info;
+
+        if (n->next)
+
+            cout << " ";
+
+        n = n->next;
+
+    }
+
+    cout << ']';
+
+}
+
+// return count of values
+
+int IntList::count() const {
+
+    int result = 0;
+
+    Node *n = first;
+
+    while (n) {
+
+        ++result;
+
+        n = n->next;
+
+    }
+
+    return result;
+
 }
