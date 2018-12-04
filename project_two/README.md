@@ -1,0 +1,5 @@
+这是CS24的期末项目，主要要求是把输入的单词组成一个double linked list，每个单词同时有一个自己的double linked list来储存单词所在的文件名和出现次数等信息
+
+每个文件名有一个自己的Node，Node中储存在这个文件中这个单词的出现次数
+
+单词的list要按照字母排序，文件的list要按照count排序，count多的在前面
