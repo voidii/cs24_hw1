@@ -6,8 +6,6 @@
 #include <fstream>
 #include "dirent.h"
 #include "word.h"
-#include "list.h"
-#include "itemtype.h"
 #include "wordsearchcount.h"
 
 using namespace std;
@@ -67,27 +65,8 @@ int main(int argc, char* argv[])
 			}
 			else
 			{
-				/*int j = 0;
-				while (j <= words_list_size)
-				{
-					if (word_s[j].wordname() == word)
-					{
-						word_s[j].bag_file_add_one(files[i]);
-						break;
-					}
-					else if (j == words_list_size)
-					{
-						word_s[j].input_word(word);
-						words_list_size = words_list_size + 1;
-					}
-					else
-					{
-						j++;
-					}
-				}*/
-				w.input_word(word_file_put_in);
+				w.input_word(word_file_put_in, files[i]);
 			}
-
 		}
 		fin.close();
 	}
@@ -95,35 +74,36 @@ int main(int argc, char* argv[])
 		{
 			cout << "Enter word: ";
 			cin >> word_we_put_in;
-			cout << "Enter threshold: "
+			cout << "Enter threshold: ";
 			cin >> threshold;
 			if( word_we_put_in != "exit")
 			{
-				/*int i = 0;
-				while(i < words_list_size)
+				int i = 0;
+				wordNode *item = w.front_word;
+				while (i < w.number_of_word())
 				{
-					if (word_s[i].wordname() == word_we_put_in)
+					if (w.wordname(i) == word_we_put_in)
 					{
-						cout << "The word: " << word_s[i].wordname() << " and its occurence is: ";
-						word_s[i].get_file_name();
-						cout << endl;
+						Node *check_count_of_list = (item->head_of_list).front;
+						while(check_count_of_list != NULL)
+						{
+							if((item->head_of_list).get_count(check_count_of_list) >= threshold)
+							{
+								cout << "File: " << (check_count_of_list->file_name).filename() << "; " << "Count: " << (item->head_of_list).get_count(check_count_of_list) << endl;
+								check_count_of_list = check_count_of_list -> next;
+							}
+							else{
+								break;
+							}
+						}
 						break;
 					}
 					else
 					{
 						i++;
+						item = item -> nextword;
 					}
 				}
-				if (i == words_list_size)
-				{
-					cout << "Sorry there is no such word" << endl;
-				}*/
-				int i = 0;
-				while (i < w.number_of_word())
-				{
-					if (w.wordname(i) == word_we_put_in)
-					{
-						
 			}
 			else
 			{

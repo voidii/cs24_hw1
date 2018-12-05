@@ -1,75 +1,92 @@
 #include <iostream>
 #include <string>
-//#include "itemtype.h"
 #include "word.h"
-#include "list.h"
 using namespace std;
 
 word::word(){
     used = 0;
-	front_word = rear_word = NULL;
+	front_word = last_word = NULL;
 }
 
 string word::wordname(int n)
 {
-	Node *item;
+	wordNode *item;
 	item = front_word;
 	for (int i = 0; i < n; i++)
 	{
-		item = item->next;
+		item = item->nextword;
 	}
 	return item->stored_word;
 }
 
-void set_ptr_to_dll()
-{
-	file_that_count_most = list::head();//这个地方就是不知道怎么写玛德
-}
-
-int number_of_word()
+int word::number_of_word()
 {
 	return used;
 }
 
-void word::input_word(string input_word_name)//根据单词开头字母来合理插入到list的正确位置
+void word::input_word(string input_word_name, string fname)//根据单词开头字母来合理插入到list的正确位置
 {
-	Node *item = new Node;
+	wordNode *item = new wordNode;
 	item -> stored_word = input_word_name;
+	wordNode *temp_check = front_word;
+	for (int i = 0; i < used; i++)
+	{
+		if (item -> stored_word == temp_check -> stored_word)//如果已经有了单词，就让其file count + 1
+		{
+			(temp_check->head_of_list).add_in(fname);
+			return;
+		}
+		temp_check = temp_check -> nextword;
+	}
 	while(used < 2)
 	{
 		if(used == 0)
 		{
 			front_word = last_word = item;
+			List l;
+			l.add_in(fname);
+			(item -> head_of_list).front = l.front;
 		}
 		else
 		{
-			last_word -> next = item;
+			last_word -> nextword = item;
 			last_word = item;
+			List l;
+			l.add_in(fname);
+			(item -> head_of_list).front = l.front;
 		}
 	used = used + 1;
 	return;
 	}
-	Node *temp1 = front_word;
-	Node *temp2 = front_word -> next;
+	wordNode *temp1 = new wordNode;
+	wordNode *temp2 = new wordNode;
+	temp1 = front_word;
+	temp2 = front_word->nextword;
 	while(temp2 != NULL)//如果单词头字母大于前者但是小于后者，那么就插入在这里
 	{
 		if (inFront(temp1->stored_word, item->stored_word) && inFront(item->stored_word, temp2->stored_word))
 		{
-			temp1 -> next = item;
-			temp2 -> prev = item;
-			item -> next = temp2;
-			item -> prev = temp1;
+			temp1 -> nextword = item;
+			temp2 -> prevword = item;
+			item -> nextword = temp2;
+			item -> prevword = temp1;
+			List l;
+			l.add_in(fname);
+			(item -> head_of_list).front = l.front;
 			return;
 		}
 		else
 		{
-			temp1 = temp1 -> next;
-			temp2 = temp2 -> next;
+			temp1 = temp1 -> nextword;
+			temp2 = temp2 -> nextword;
 		}
 	}
-	last_word -> next = item;
-	item ->prev = last_word;
+	last_word -> nextword = item;
+	item ->prevword = last_word;
 	last_word = item;
+	List l;
+	l.add_in(fname);
+	(item -> head_of_list).front = l.front;
 }
 
 bool word::inFront(string input1, string input2)//检测1是否在2前面

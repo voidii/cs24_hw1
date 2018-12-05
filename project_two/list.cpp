@@ -1,5 +1,7 @@
-#include "list.h"
 #include <iostream>
+#include <string>
+#include "list.h"
+using namespace std;
 
 List::List()
 {
@@ -8,26 +10,29 @@ List::List()
 	rear = NULL;
 }
 
-Node List::*head()
+/*Node List::*front
 {
 	return front;
+}*/
+
+int List::get_count(Node *item_to_got_count)
+{
+	return (item_to_got_count -> file_name).count();
 }
 
 void List::add_in(string fname)
 {
 	int max = 0;//为了后续的排序，先设置一个标准
+	Node *item = new Node;
+	(item -> file_name).set_filename(fname);
 	if (size == 0)
 	{
-		Node *item = new Node;
-		(item -> file_name).set_filename(fname);
 		(item -> file_name).set_count(1);
 		front = rear = item;
 		size++;
 	}
 	else if (size == 1)
 	{
-		Node *item = new Node;
-		(item -> file_name).set_filename(fname);
 		if ((item -> file_name).filename() == (front -> file_name).filename())
 		{
 			(front -> file_name).set_count((front -> file_name).count() + 1);//如果已经存在，那么头文字count + 1
@@ -41,24 +46,24 @@ void List::add_in(string fname)
 	}
 	else//当至少有两个Node之后就可以开始在adding的时候根据次数大小调整位置
 	{
-		Node* temp = front;
+		Node* temp1 = front;
 		Node* temp2 = front;//因为temp2要一直循环，所以设置temp3来记录max所在位置
 		Node* temp3 = front;
 		for (int i=0; i<size; i++) 
 		{
-			if ((temp -> file_name).filename() == fname)//检测是否已经存在
+			if ((temp1 -> file_name).filename() == fname)//检测是否已经存在
 			{
-				(temp -> file_name)set_count((temp -> file_name).count() + 1);
+				(temp1 -> file_name).set_count((temp1 -> file_name).count() + 1);
 				return;
 			}
 			else
 			{
-				temp = temp -> next;
+				temp1 = temp1 -> next;
 			}
 		}
 		Node* temp = item;//不存在就加在末尾
-		(item -> filename).set_filename(fname);
-		(item -> filename).set_count(1);
+		(item -> file_name).set_filename(fname);
+		(item -> file_name).set_count(1);
 		rear -> next = item;
 		rear = item;
 		
@@ -78,7 +83,6 @@ void List::add_in(string fname)
 		temp3 -> next = front;
 		front -> prev = temp3;
 		front = temp3;
-		
     }
 }
 
