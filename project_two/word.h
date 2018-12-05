@@ -18,9 +18,8 @@ private:
 public:
 	//void print();
 	word();
-	void input_word(string input_word_name);//加入文件
+	void input_word(string input_word_name);//加入单词
 	string wordname(int n) const;//返还第n个单词的单词名
-	//void move_up_file(string input_word_name);//根据单词名更改文件位置
 	bool inFront(string input1, string input2)；//检测1是否在2前面
 	int number_of_word();//检测有多少词
 	void set_ptr_to_dll();//指向list的head

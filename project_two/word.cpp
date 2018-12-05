@@ -23,7 +23,7 @@ string word::wordname(int n)
 
 void set_ptr_to_dll()
 {
-	file_that_count_most = list::head();
+	file_that_count_most = list::head();//这个地方就是不知道怎么写玛德
 }
 
 int number_of_word()
@@ -31,7 +31,7 @@ int number_of_word()
 	return used;
 }
 
-void word::input_word(string input_word_name)
+void word::input_word(string input_word_name)//根据单词开头字母来合理插入到list的正确位置
 {
 	Node *item = new Node;
 	item -> stored_word = input_word_name;
@@ -51,7 +51,7 @@ void word::input_word(string input_word_name)
 	}
 	Node *temp1 = front_word;
 	Node *temp2 = front_word -> next;
-	while(temp2 != NULL)
+	while(temp2 != NULL)//如果单词头字母大于前者但是小于后者，那么就插入在这里
 	{
 		if (inFront(temp1->stored_word, item->stored_word) && inFront(item->stored_word, temp2->stored_word))
 		{
