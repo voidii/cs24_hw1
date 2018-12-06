@@ -78,15 +78,16 @@ int main(int argc, char* argv[])
 			if( word_we_put_in != "exit")
 			{
 				int i = 0;
-				WordNode *item = w.front_word;
+				WordNode *item = new WordNode;
+				item = w.front_word;
 				while (i < w.number_of_word())
 				{
 					if (w.wordname(i) == word_we_put_in)
 					{
-						FileNode *check_count_of_list = (item->fileListHead);
+						FileNode *check_count_of_list = ((item->list_for_word).head());
 						while(check_count_of_list != NULL)
 						{
-							if((item->fileListHead)->wordCount >= threshold)
+							if(((item->list_for_word).head())->wordCount >= threshold)
 							{
 								cout << "File: " << (check_count_of_list->file_name) << "; " << "Count: " << check_count_of_list -> wordCount << endl;
 								check_count_of_list = check_count_of_list -> nextNode;

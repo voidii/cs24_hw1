@@ -3,8 +3,6 @@
 #include "word.h"
 using namespace std;
 
-word_list::word_list(){
-}
 
 string word_list::wordname(int n)
 {
@@ -22,21 +20,17 @@ int word_list::number_of_word()
 	return used;
 }
 
-FileNode* List::head()
-{
-	return front;
-}
 
 void word_list::input_word(string input_word_name, string fname)//根据单词开头字母来合理插入到list的正确位置
 {
-	WordNode *item = NULL;
+	WordNode *item = new WordNode;
 	item -> stored_word = input_word_name;
 	WordNode *temp_check = front_word;
 	for (int i = 0; i < used; i++)
 	{
 		if (item -> stored_word == temp_check -> stored_word)//如果已经有了单词，就让其file count + 1
 		{
-			(temp_check->fileListHead).add_in(fname);
+			(temp_check->list_for_word).add_in(fname);
 			return;
 		}
 		temp_check = temp_check -> nextNode;
@@ -46,9 +40,9 @@ void word_list::input_word(string input_word_name, string fname)//根据单词�
 		if(used == 0)
 		{
 			front_word = last_word = item;
-			List l;
-			l.add_in(fname);
-			(item->fileListHead) = l.head();
+			//List l;
+			(item ->list_for_word).add_in(fname);
+			(item->fileListHead) = (item->list_for_word).head();
 		}
 
 		else
@@ -56,15 +50,15 @@ void word_list::input_word(string input_word_name, string fname)//根据单词�
 			item -> prevNode = front_word;
 			front_word -> nextNode = item;
 			last_word = item;
-			List l;
-			l.add_in(fname);
-			(item->fileListHead) = l.head();
+			//List l;
+			(item->list_for_word).add_in(fname);
+			(item->fileListHead) = (item->list_for_word).head();
 		}
 	used = used + 1;
 	return;
 	}
-	WordNode *temp1 = new WordNode;
-	WordNode *temp2 = new WordNode;
+	WordNode *temp1;
+	WordNode *temp2;
 	temp1 = front_word;
 	temp2 = front_word -> nextNode;
 	while(temp2 != NULL)//如果单词头字母大于前者但是小于后者，那么就插入在这里
@@ -75,9 +69,10 @@ void word_list::input_word(string input_word_name, string fname)//根据单词�
 			temp2 -> prevNode = item;
 			item -> nextNode = temp2;
 			item -> prevNode = temp1;
-			List l;
-			l.add_in(fname);
-			(item->fileListHead) = l.head();
+			//List l;
+			(item->list_for_word).add_in(fname);
+			(item->fileListHead) = (item->list_for_word).head();
+			used++;
 			return;
 		}
 		else
@@ -89,9 +84,10 @@ void word_list::input_word(string input_word_name, string fname)//根据单词�
 	last_word -> nextNode = item;
 	item ->prevNode = last_word;
 	last_word = item;
-	List l;
-	l.add_in(fname);
-	(item->fileListHead) = l.head();
+	//List l;
+	(item->list_for_word).add_in(fname);
+	(item->fileListHead) = (item->list_for_word).head();
+	used++;
 }
 
 bool word_list::inFront(string input1, string input2)//检测1是否在2前面
