@@ -31,9 +31,8 @@ int main(int argc, char* argv[])
 {
 	string dir; //
 	vector<string> files = vector<string>();
-	//bag bag_one;
-	word w;
-	//int words_list_size = 0;
+	word_list w;
+
 
 
 
@@ -79,18 +78,18 @@ int main(int argc, char* argv[])
 			if( word_we_put_in != "exit")
 			{
 				int i = 0;
-				wordNode *item = w.front_word;
+				WordNode *item = w.front_word;
 				while (i < w.number_of_word())
 				{
 					if (w.wordname(i) == word_we_put_in)
 					{
-						Node *check_count_of_list = (item->head_of_list).front;
+						FileNode *check_count_of_list = (item->fileListHead);
 						while(check_count_of_list != NULL)
 						{
-							if((item->head_of_list).get_count(check_count_of_list) >= threshold)
+							if((item->fileListHead)->wordCount >= threshold)
 							{
-								cout << "File: " << (check_count_of_list->file_name).filename() << "; " << "Count: " << (item->head_of_list).get_count(check_count_of_list) << endl;
-								check_count_of_list = check_count_of_list -> next;
+								cout << "File: " << (check_count_of_list->file_name) << "; " << "Count: " << check_count_of_list -> wordCount << endl;
+								check_count_of_list = check_count_of_list -> nextNode;
 							}
 							else{
 								break;
@@ -101,7 +100,7 @@ int main(int argc, char* argv[])
 					else
 					{
 						i++;
-						item = item -> nextword;
+						item = item -> nextNode;
 					}
 				}
 			}

@@ -10,78 +10,81 @@ List::List()
 	rear = NULL;
 }
 
-/*Node List::*front
+FileNode* List::head()
 {
 	return front;
-}*/
+}
 
-int List::get_count(Node *item_to_got_count)
+int List::get_count(FileNode *item_to_got_count)
 {
-	return (item_to_got_count -> file_name).count();
+	return wordCount;
 }
 
 void List::add_in(string fname)
 {
 	int max = 0;//为了后续的排序，先设置一个标准
-	Node *item = new Node;
-	(item -> file_name).set_filename(fname);
+	FileNode *item = NULL;
+	(item -> file_name) = fname;
 	if (size == 0)
 	{
-		(item -> file_name).set_count(1);
+		item -> wordCount = 1;
 		front = rear = item;
 		size++;
 	}
 	else if (size == 1)
 	{
-		if ((item -> file_name).filename() == (front -> file_name).filename())
+		if ((item -> file_name) == (front -> file_name))
 		{
-			(front -> file_name).set_count((front -> file_name).count() + 1);//如果已经存在，那么头文字count + 1
+			front -> wordCount = front -> wordCount + 1;//如果已经存在，那么头文字count + 1
 			delete item;
 		}
 		else
 		{
-			rear -> next = item;
+			item -> prevNode = front;
+			front -> nextNode = item;
 			rear = item;
+			size++;
 		}
 	}
 	else//当至少有两个Node之后就可以开始在adding的时候根据次数大小调整位置
 	{
-		Node* temp1 = front;
-		Node* temp2 = front;//因为temp2要一直循环，所以设置temp3来记录max所在位置
-		Node* temp3 = front;
+		FileNode* temp1 = front;
+		FileNode* temp2 = front;//因为temp2要一直循环，所以设置temp3来记录max所在位置
+		FileNode* temp3 = front;
 		for (int i=0; i<size; i++) 
 		{
-			if ((temp1 -> file_name).filename() == fname)//检测是否已经存在
+			if ((temp1 -> file_name) == fname)//检测是否已经存在
 			{
-				(temp1 -> file_name).set_count((temp1 -> file_name).count() + 1);
+				(temp1 -> file_name)->wordCount++;
 				return;
 			}
 			else
 			{
-				temp1 = temp1 -> next;
+				temp1 = temp1 -> nextNode;
 			}
 		}
 		Node* temp = item;//不存在就加在末尾
-		(item -> file_name).set_filename(fname);
-		(item -> file_name).set_count(1);
-		rear -> next = item;
+		item -> file_name = fname;
+		item -> wordCount++;
+		rear -> nextNode = item;
+		item -> prevNode = rear;
 		rear = item;
 		
 		//开始检测count最大的那个字
-		max = (temp2->file_name).count();
+		max = temp2 -> wordCount;
 		for (int i = 0; i < size; i++)
 		{
-			temp2 = temp2 -> next;
-			if ((temp2->file_name).count() > max)
+			temp2 = temp2 -> nextNode;
+			if (temp2->wordCount > max)
 			{
-				max = (temp2->file_name).count();
+				max = temp2->wordCount;
 				temp3 = temp2;
 			}
 		}
-		temp3 -> next -> prev = temp3 -> prev;//调整temp3的位置，放入首位
-		temp3 -> prev -> next = temp3 -> next;
-		temp3 -> next = front;
-		front -> prev = temp3;
+		temp3 -> nextNode -> prevNode = temp3 -> prevNode;//调整temp3的位置，放入首位
+		temp3 -> prevNode -> nextNode = temp3 -> nextNode;
+		temp3 -> nextNode = front;
+		front -> prevNode = temp3;
 		front = temp3;
     }
 }
