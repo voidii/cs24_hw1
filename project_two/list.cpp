@@ -72,7 +72,7 @@ void List::add_in(string fname)
 			rear = item;
 			size++;
 		}
-		if (size == 2)
+		if (size == 2)//当只有两个文件在list里面的时候，因为只有一头一尾，所以单独拿出来order
 		{
 			if (rear->wordCount > front->wordCount)
 			{
@@ -86,48 +86,26 @@ void List::add_in(string fname)
 			}
 		}
 	}
-	
-		//开始检测count最大的那个字
-	FileNode* temp2 = front;//因为temp2要一直循环，所以设置temp3来记录max所在位置
+	FileNode* temp2 = front;
 	FileNode* temp3 = front;
 	max = temp2 -> wordCount;
 	if (size > 1)
 	{
-		for (int i = 0; i < size; i++)
+		while (temp2->nextNode != NULL)//调整位置
 		{
-			if (temp2->wordCount > max)
-			{
-				max = temp2->wordCount;
-				temp3 = temp2;
-			}
 			temp2 = temp2->nextNode;
-		}
-	}
-	if (temp3 != front)
-	{
-		if (temp3 != rear)
-		{
-			FileNode* temp4 = front;
-			temp3->nextNode->prevNode = front;//调整temp3的位置，放入首位
-			temp3->prevNode->nextNode = front;
-			front->nextNode = temp3->nextNode;
-			front->prevNode = temp3->prevNode;
-			temp3->nextNode = temp4->nextNode;
-			temp4->nextNode->prevNode = temp3;
-			temp3->prevNode = NULL;
-			front = temp3;
-
-		}
-		else
-		{
-			temp3->nextNode = front->nextNode;
-			front -> prevNode = temp3->prevNode;
-			temp3->prevNode->nextNode = front;
-			front->nextNode->prevNode = temp3;
-			temp3->prevNode = NULL;
-			front->nextNode = NULL;
-			rear = front;
-			front = temp3;
+			if (temp2->wordCount > temp3->wordCount)
+			{
+				FileNode* temp4 = new FileNode;
+				temp4->file_name = temp2->file_name;
+				temp4->wordCount = temp2->wordCount;
+				temp2->file_name = temp3->file_name;
+				temp2->wordCount = temp3->wordCount;
+				temp3->file_name = temp4->file_name;
+				temp3->wordCount = temp4->wordCount;
+				delete temp4;
+			}
+			temp3 = temp3->nextNode;
 		}
 	}
 }

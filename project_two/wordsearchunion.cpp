@@ -6,7 +6,7 @@
 #include <fstream>
 #include "dirent.h"
 #include "word.h"
-#include "wordsearchcount.h"
+#include "wordsearchunion.h"
 
 using namespace std;
 
@@ -33,9 +33,6 @@ int main(int argc, char* argv[])
 	vector<string> files = vector<string>();
 	word_list w;
 
-
-
-
 	if (argc < 2)
 	{
 		cout << "No Directory specified; Exiting ..." << endl;
@@ -53,8 +50,7 @@ int main(int argc, char* argv[])
 	{
 		if (files[i][0] == '.')continue; 
 		ifstream fin((string(argv[1]) + slash + files[i]).c_str()); 
-		
-		string word_we_put_in;
+
 		while (true)
 		{
 			fin >> word_file_put_in;
@@ -69,39 +65,55 @@ int main(int argc, char* argv[])
 		}
 		fin.close();
 	}
-
-	cout << "Enter word: ";
-	cin >> word_we_put_in;
-	cout << "Enter threshold: ";
-	cin >> threshold;
-	if( word_we_put_in != "exit")
+	string word1_we_put_in;
+	string word2_we_put_in;
+	cout << "Enter word1: ";
+	cin >> word1_we_put_in;
+	cout << "Enter Word2: ";
+	cin >> word2_we_put_in;
+	if( word1_we_put_in != "000")
 	{
 		int i = 0;
-		WordNode *item = new WordNode;
-		item = w.front_word;
-		while (i < w.number_of_word())
+		int j = 0;
+		WordNode *item_one = w.front_word;
+		WordNode *item_two = w.front_word;
+		while (i < w.number_of_word() && j < w.number_of_word())
 		{
-			if (w.wordname(i) == word_we_put_in)
+			if (w.wordname(i) == word1_we_put_in && w.wordname(j) != word2_we_put_in)
 			{
-				FileNode *check_count_of_list = ((item->list_for_word).head());
-				while(check_count_of_list != NULL)
-				{
-					if(((item->list_for_word).head())->wordCount >= threshold)
-					{
-						cout << "File: " << (check_count_of_list->file_name) << "; " << "Count: " << check_count_of_list -> wordCount << endl;
-						check_count_of_list = check_count_of_list -> nextNode;
-					}
-					else{
-						break;
-					}
-				}
-				break;
+				item_two = item_two -> nextNode;
+				j++;
 			}
-			else
+			else if (w.wordname(i) != word1_we_put_in && w.wordname(j) == word2_we_put_in)
 			{
 				i++;
-				item = item -> nextNode;
+				item_one = item_one -> nextNode;
 			}
+			else if(w.wordname(i) == word1_we_put_in && w.wordname(j) == word2_we_put_in)
+			{
+				break;
+			}
+			else{
+				i++;
+				item_one = item_one -> nextNode;
+				item_two = item_two -> nextNode;
+				j++;
+			}
+		}
+		FileNode *check_list1 = ((item_one->list_for_word).head());
+		FileNode *check_list2 = ((item_two->list_for_word).head());
+		while(check_list1 != NULL)
+		{
+			while (check_list2 != NULL)
+			{
+				if (check_list2 -> file_name == check_list1 -> file_name)
+				{
+					cout << check_list2 -> file_name << endl;
+					break;
+				}
+				check_list2 = check_list2 -> nextNode;
+			}
+			check_list1 = check_list1 -> nextNode;
 		}
 	}
 	else
